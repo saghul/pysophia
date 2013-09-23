@@ -60,8 +60,8 @@ class Sophia(object):
     def set(self, key, value):
         if self._closed:
             raise RuntimeError('db is closed')
-        if not isinstance(key, basestring) or not isinstance(value, basestring):
-            raise TypeError('only unicode or byte string objects are supported')
+        if not isinstance(key, bytes) or not isinstance(value, bytes):
+            raise TypeError('byte string objects are supported')
         _key = ffi.new('char[]', key)
         _value = ffi.new('char[]', value)
         r = lib.sp_set(self._db, _key, ffi.sizeof(_key), _value, ffi.sizeof(_value))
@@ -72,8 +72,8 @@ class Sophia(object):
     def get(self, key):
         if self._closed:
             raise RuntimeError('db is closed')
-        if not isinstance(key, basestring):
-            raise TypeError('only unicode or byte string objects are supported')
+        if not isinstance(key, bytes):
+            raise TypeError('byte string objects are supported')
         _key = ffi.new('char[]', key)
         _value = ffi.new('void**')
         _value_size = ffi.new('size_t*')
@@ -90,8 +90,8 @@ class Sophia(object):
     def delete(self, key):
         if self._closed:
             raise RuntimeError('db is closed')
-        if not isinstance(key, basestring):
-            raise TypeError('only unicode or byte string objects are supported')
+        if not isinstance(key, bytes):
+            raise TypeError('byte string objects are supported')
         _key = ffi.new('char[]', key)
         r = lib.sp_delete(self._db, _key, ffi.sizeof(_key))
         if r != 0:
