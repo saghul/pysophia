@@ -5,7 +5,7 @@ pysophia
 Overview
 ========
 
-pysophia is a Python (CFFI based) library wrapping the `Sophia library<http://sphia.org>`_.
+pysophia is a Python (CFFI based) library wrapping the `Sophia library <http://sphia.org>`_.
 
     Sophia is a modern embeddable key-value database designed for a high load environment.
 
