@@ -25,7 +25,6 @@ typedef enum {
 	SPVERSION  /* uint32_t*, uint32_t* */
 } spopt;
 
-/* NOTE: this is an anonymous enum in sophia itself */
 typedef enum {
 	SPO_RDONLY = 1,
 	SPO_RDWR   = 2,
