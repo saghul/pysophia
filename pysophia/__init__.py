@@ -1,9 +1,17 @@
 
-__all__ = ['Sophia', 'SophiaError']
+__all__ = ['Sophia', 'SophiaError', 'sophia_version']
 
 from cffi import FFI
 from pysophia._c_ffi import lib as libc
 from pysophia._sophia_ffi import ffi, lib
+
+
+# get version
+major = ffi.new('uint32_t *')
+minor = ffi.new('uint32_t *')
+lib.sp_ctl(ffi.NULL, lib.SPVERSION, major, minor)
+sophia_version = '%d.%d' % (major[0], minor[0])
+del major, minor
 
 
 class SophiaError(Exception):
