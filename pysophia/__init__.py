@@ -2,16 +2,8 @@
 __all__ = ['Sophia', 'SophiaError']
 
 from cffi import FFI
+from pysophia._c_ffi import lib as libc
 from pysophia._sophia_ffi import ffi, lib
-
-
-# Load libc
-c_ffi = FFI()
-c_ffi.cdef("""
-void free(void *ptr);
-void * malloc(size_t size);
-""")
-c_lib = c_ffi.dlopen(None)
 
 
 class SophiaError(Exception):
@@ -30,9 +22,11 @@ class Sophia(object):
     def __init__(self, path, flags):
         if self._env is not None or self._db is not None:
             raise RuntimeError('object was already initialized')
+        # initialize environment
         env = lib.sp_env()
         if env == ffi.NULL:
             raise MemoryError('could not allocate environment')
+        # set db directory and flags
         _flags = ffi.cast('int', flags)
         _path = ffi.new('char[]', path)
         r = lib.sp_ctl(env, lib.SPDIR, _flags, _path)
@@ -40,6 +34,7 @@ class Sophia(object):
             error = lib.sp_error(env)
             lib.sp_destroy(env)
             raise SophiaError(ffi.string(error))
+        # open db
         db = lib.sp_open(env)
         if db == ffi.NULL:
             error = lib.sp_error(env)
@@ -84,7 +79,7 @@ class Sophia(object):
         elif r == 0:
             raise KeyError('%s not found' % key)
         value = ffi.string(ffi.cast('char*', _value[0]), _value_size[0])
-        c_lib.free(_value[0])
+        libc.free(_value[0])
         return value
 
     def delete(self, key):
