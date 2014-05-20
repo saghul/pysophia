@@ -69,8 +69,7 @@ class Sophia(object):
         _value = ffi.new('char[]', value)
         r = lib.sp_set(self._db, _key, ffi.sizeof(_key), _value, ffi.sizeof(_value))
         if r != 0:
-            error = lib.sp_error(self._db)
-            raise SophiaError(ffi.string(error))
+            self._raise_error()
 
     def get(self, key):
         if self._closed:
@@ -82,8 +81,7 @@ class Sophia(object):
         _value_size = ffi.new('size_t*')
         r = lib.sp_get(self._db, _key, ffi.sizeof(_key), _value, _value_size)
         if r == -1:
-            error = lib.sp_error(self._db)
-            raise SophiaError(ffi.string(error))
+            self._raise_error()
         elif r == 0:
             raise KeyError('%s not found' % key)
         value = ffi.string(ffi.cast('char*', _value[0]), _value_size[0])
@@ -98,8 +96,11 @@ class Sophia(object):
         _key = ffi.new('char[]', key)
         r = lib.sp_delete(self._db, _key, ffi.sizeof(_key))
         if r != 0:
-            error = lib.sp_error(self._db)
-            raise SophiaError(ffi.string(error))
+            self._raise_error()
+
+    def _raise_error(self):
+        error = lib.sp_error(self._db)
+        raise SophiaError(ffi.string(error))
 
     def __del__(self):
         self.close()
