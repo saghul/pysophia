@@ -1,6 +1,8 @@
 
 __all__ = ['ffi', 'lib']
 
+import os
+
 from cffi import FFI
 
 
@@ -73,5 +75,6 @@ void sp_stat(void *ptr, spstat*);
 ffi = FFI()
 ffi.cdef(sophia_h)
 
-lib = ffi.dlopen('sophia')
+libname = os.getenv('SOPHIA_LIB', 'sophia')
+lib = ffi.dlopen(libname)
 
