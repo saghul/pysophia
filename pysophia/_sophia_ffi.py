@@ -1,5 +1,5 @@
 
-__all__ = ['ffi', 'lib']
+__all__ = ['ffi', 'lib', 'ffic', 'libc']
 
 import os
 
@@ -77,4 +77,14 @@ ffi.cdef(sophia_h)
 
 libname = os.getenv('SOPHIA_LIB', 'sophia')
 lib = ffi.dlopen(libname)
+
+
+ffic = FFI()
+ffic.cdef("""
+void free(void *ptr);
+void* malloc(size_t size);
+void* realloc(void *ptr, size_t size);
+""")
+
+libc = ffic.dlopen(None)
 

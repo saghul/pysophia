@@ -2,8 +2,7 @@
 __all__ = ['Sophia', 'SophiaError', 'sophia_version']
 
 from cffi import FFI
-from pysophia._c_ffi import lib as libc
-from pysophia._sophia_ffi import ffi, lib
+from pysophia._sophia_ffi import ffi, lib, libc
 
 
 # get version
